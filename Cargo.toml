@@ -74,12 +74,12 @@ experimental-protocols = ["evm-amm-state/experimental-protocols"]
 [dependencies]
 alloy-primitives = { version = ">=1.4, <2", features = ["map"] }
 alloy-sol-types = ">=1.4, <2"
-alloy-transport-balancer = { version = "0.3.0", default-features = false, features = ["balancer", "batching"] }
+alloy-transport-balancer = { git = "https://github.com/thesn10/alloy-transport-balancer", branch = "main", default-features = false, features = ["balancer", "batching"] }
 anyhow = "1.0.98"
 crossterm = "0.29"
 dotenvy = "0.15"
-evm-amm-state = { version = "0.3.0", default-features = false }
-evm-fork-cache = { version = "0.4.0", default-features = false, features = ["reactive", "reactive-ws"] }
+evm-amm-state = { git = "https://github.com/thesn10/evm-amm-state", branch = "main", default-features = false }
+evm-fork-cache = { git = "https://github.com/thesn10/evm-fork-cache", branch = "main", default-features = false, features = ["reactive", "reactive-ws"] }
 futures = "0.3"
 petgraph = "0.6"
 ratatui = { version = "0.30.2", default-features = false, features = ["crossterm"] }
