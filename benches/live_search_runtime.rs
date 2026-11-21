@@ -8,13 +8,13 @@ use std::{
     time::{Duration, Instant},
 };
 
-use alloy_consensus::Header as ConsensusHeader;
-use alloy_network::AnyNetwork;
+use evm_amm_search::alloy_consensus::Header as ConsensusHeader;
+use evm_amm_search::alloy_network::AnyNetwork;
 use alloy_primitives::{Address, B256, Bytes, U256};
-use alloy_provider::RootProvider;
-use alloy_rpc_client::RpcClient;
-use alloy_rpc_types_eth::Header as RpcHeader;
-use alloy_transport::mock::Asserter;
+use evm_amm_search::alloy_provider::RootProvider;
+use evm_amm_search::alloy_rpc_client::RpcClient;
+use evm_amm_search::alloy_rpc_types_eth::Header as RpcHeader;
+use evm_amm_search::alloy_transport::mock::Asserter;
 use criterion::{BatchSize, BenchmarkId, Criterion, black_box, criterion_group, criterion_main};
 use evm_amm_search::{
     AmmGraph, AmmSearcher, FastLaneConfig, GraphBuildOptions, HeuristicSearchConfig, LiveAmmGraph,

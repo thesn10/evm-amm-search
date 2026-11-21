@@ -6,6 +6,30 @@
 //! graph from its ready pool metadata, and evaluates candidate routes by calling
 //! each pool adapter's canonical `simulate_swap`.
 
+#[cfg(all(feature = "alloy1", feature = "alloy2"))]
+compile_error!("features `alloy1` and `alloy2` are mutually exclusive; pass `--no-default-features --features alloy2`");
+
+#[cfg(not(any(feature = "alloy1", feature = "alloy2")))]
+compile_error!("exactly one of features `alloy1` or `alloy2` must be enabled");
+
+pub use alloy_transport_balancer::{
+    alloy_json_rpc, alloy_transport, alloy_transport_http, reqwest,
+};
+pub use evm_fork_cache::{
+    alloy_consensus, alloy_eips, alloy_network, alloy_provider, alloy_pubsub, alloy_rpc_client,
+    alloy_rpc_types_eth, revm,
+};
+
+#[cfg(feature = "alloy1")]
+pub(crate) fn execution_gas_used<H>(result: &revm::context::result::ExecutionResult<H>) -> u64 {
+    result.gas_used()
+}
+
+#[cfg(feature = "alloy2")]
+pub(crate) fn execution_gas_used<H>(result: &revm::context::result::ExecutionResult<H>) -> u64 {
+    result.tx_gas_used()
+}
+
 mod demo_router;
 mod graph;
 mod liquidity;

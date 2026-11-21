@@ -10,7 +10,7 @@ use std::{
 };
 
 use alloy_primitives::{Address, Log, U256};
-use alloy_rpc_types_eth::Log as RpcLog;
+use crate::alloy_rpc_types_eth::Log as RpcLog;
 use evm_amm_state::adapters::{
     AdapterCache, AdapterRegistry, AmmStatePoint, PoolKey, PoolRegistration, PoolStatus,
     ProtocolId, ProtocolMetadata, SimConfig, SimError,

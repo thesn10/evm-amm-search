@@ -25,7 +25,18 @@ exclude = [
 ]
 
 [package.metadata.docs.rs]
-all-features = true
+features = [
+    "alloy1",
+    "live-runtime",
+    "uniswap-v2",
+    "uniswap-v3",
+    "pancake-v3",
+    "slipstream",
+    "balancer-v2",
+    "solidly-v2",
+    "curve",
+    "experimental-protocols",
+]
 rustdoc-args = ["--cfg", "docsrs"]
 
 # Standalone workspace root: keeps this crate from being absorbed by any
@@ -36,6 +47,7 @@ resolver = "2"
 
 [features]
 default = [
+    "alloy1",
     "live-runtime",
     "uniswap-v2",
     "uniswap-v3",
@@ -45,6 +57,8 @@ default = [
     "solidly-v2",
     "curve",
 ]
+alloy1 = ["alloy-transport-balancer/alloy1", "evm-amm-state/alloy1", "evm-fork-cache/alloy1", "dep:reqwest"]
+alloy2 = ["alloy-transport-balancer/alloy2", "evm-amm-state/alloy2", "evm-fork-cache/alloy2", "dep:reqwest2"]
 
 adapters = ["evm-amm-state/adapters"]
 live-runtime = ["adapters", "evm-amm-state/live-runtime"]
@@ -58,27 +72,19 @@ curve = ["adapters", "evm-amm-state/curve"]
 experimental-protocols = ["evm-amm-state/experimental-protocols"]
 
 [dependencies]
-alloy-consensus = "1.1.2"
-alloy-eips = "1.0.38"
-alloy-json-rpc = "1.0.38"
-alloy-primitives = { version = "1.4", features = ["map"] }
-alloy-network = "1.0.38"
-alloy-provider = { version = "1.0.38", features = ["ws"] }
-alloy-rpc-client = "1.0.38"
-alloy-rpc-types-eth = "1.0.38"
-alloy-sol-types = "1.0.38"
-alloy-transport = "1.0.38"
-alloy-transport-balancer = { version = "0.3.0" }
+alloy-primitives = { version = ">=1.4, <2", features = ["map"] }
+alloy-sol-types = ">=1.4, <2"
+alloy-transport-balancer = { version = "0.3.0", default-features = false, features = ["balancer", "batching"] }
 anyhow = "1.0.98"
 crossterm = "0.29"
 dotenvy = "0.15"
 evm-amm-state = { version = "0.3.0", default-features = false }
-evm-fork-cache = { version = "0.4.0" }
+evm-fork-cache = { version = "0.4.0", default-features = false, features = ["reactive", "reactive-ws"] }
 futures = "0.3"
 petgraph = "0.6"
 ratatui = { version = "0.30.2", default-features = false, features = ["crossterm"] }
-reqwest = { version = "0.12", features = ["gzip"] }
-revm = "34.0.0"
+reqwest = { version = "0.12", features = ["gzip", "json"], optional = true }
+reqwest2 = { package = "reqwest", version = "0.13", features = ["gzip", "json", "query"], optional = true }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2.0"

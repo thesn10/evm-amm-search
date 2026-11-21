@@ -11,10 +11,10 @@
 
 use std::{env, path::PathBuf, sync::Arc};
 
-use alloy_eips::{BlockId, BlockNumberOrTag};
-use alloy_network::AnyNetwork;
+use evm_amm_search::alloy_eips::{BlockId, BlockNumberOrTag};
+use evm_amm_search::alloy_network::AnyNetwork;
 use alloy_primitives::{Address, Bytes, U256, address, hex};
-use alloy_provider::Provider;
+use evm_amm_search::alloy_provider::Provider;
 use anyhow::{Context, Result, anyhow, ensure};
 use evm_amm_search::{
     AmmGraph, AmmSearcher, DEMO_ROUTER, DemoRouterConfig, GraphBuildOptions, RouteQuote,
@@ -31,7 +31,7 @@ use evm_fork_cache::cache::{
     CacheConfig, CacheSpeedMode, EvmCache, SharedMemoryCapacity, TxConfig,
 };
 use evm_fork_cache::{CallTrace, CallTracer};
-use revm::context::result::ExecutionResult;
+use evm_amm_search::revm::context::result::ExecutionResult;
 
 mod support;
 
@@ -491,20 +491,22 @@ fn debug_direct_curve_call(
 }
 
 fn print_result(label: &str, result: ExecutionResult) {
+    #[cfg(feature = "alloy1")]
+    let gas_used = result.gas_used();
+    #[cfg(feature = "alloy2")]
+    let gas_used = result.tx_gas_used();
     match result {
-        ExecutionResult::Success {
-            gas_used, output, ..
-        } => println!(
+        ExecutionResult::Success { output, .. } => println!(
             "{label}: success gas={gas_used} output=0x{}",
             hex::encode(output.into_data())
         ),
-        ExecutionResult::Revert { gas_used, output } => {
+        ExecutionResult::Revert { output, .. } => {
             println!(
                 "{label}: revert gas={gas_used} output=0x{}",
                 hex::encode(output)
             )
         }
-        ExecutionResult::Halt { reason, gas_used } => {
+        ExecutionResult::Halt { reason, .. } => {
             println!("{label}: halt gas={gas_used} reason={reason:?}")
         }
     }

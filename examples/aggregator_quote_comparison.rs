@@ -33,10 +33,10 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-use alloy_eips::BlockId;
-use alloy_network::AnyNetwork;
+use evm_amm_search::alloy_eips::BlockId;
+use evm_amm_search::alloy_network::AnyNetwork;
 use alloy_primitives::{Address, U256, address};
-use alloy_provider::Provider;
+use evm_amm_search::alloy_provider::Provider;
 use anyhow::{Context, Result, anyhow, ensure};
 use evm_amm_search::{
     AmmGraph, AmmSearcher, DEMO_ROUTER, DemoRouterConfig, GraphBuildOptions, HeuristicSearchConfig,
@@ -50,7 +50,7 @@ use evm_amm_state::adapters::{
     UniswapV2Adapter, UniswapV2FactoryConfig, UniswapV3FactoryConfig,
 };
 use evm_fork_cache::cache::{CacheConfig, CacheSpeedMode, EvmCache, SharedMemoryCapacity};
-use reqwest::{Client, Url};
+use evm_amm_search::reqwest::{Client, Url};
 use serde_json::Value;
 use tokio::{task::JoinHandle, time::sleep};
 
@@ -975,7 +975,7 @@ async fn quote_1inch(
     }
 }
 
-async fn decode_json_response(response: reqwest::Response) -> Result<Value> {
+async fn decode_json_response(response: evm_amm_search::reqwest::Response) -> Result<Value> {
     let status = response.status();
     let text = response.text().await.context("read quote response")?;
     let json: Value = serde_json::from_str(&text).with_context(|| {

@@ -10,7 +10,7 @@ use evm_amm_state::adapters::{AdapterRegistry, CurveVariant, PoolKey, ProtocolMe
 use evm_fork_cache::cache::{EvmCache, EvmOverlay};
 #[cfg(feature = "live-runtime")]
 use evm_fork_cache::mapping_probe::TrackedMapping;
-use revm::context::result::ExecutionResult;
+use crate::revm::context::result::ExecutionResult;
 
 use crate::RouteQuote;
 #[cfg(feature = "live-runtime")]
@@ -887,20 +887,19 @@ fn push_common(
 }
 
 fn decode_execute_result(result: ExecutionResult) -> Result<(U256, u64)> {
+    let gas_used = crate::execution_gas_used(&result);
     match result {
-        ExecutionResult::Success {
-            gas_used, output, ..
-        } => {
+        ExecutionResult::Success { output, .. } => {
             let decoded =
                 router_abi::execute_p43bff2e1Call::abi_decode_returns(&output.into_data())
                     .context("decode gas router return")?;
             Ok((decoded, gas_used))
         }
-        ExecutionResult::Revert { gas_used, output } => Err(anyhow!(
+        ExecutionResult::Revert { output, .. } => Err(anyhow!(
             "demo router reverted after {gas_used} gas: 0x{}",
             hex::encode(output)
         )),
-        ExecutionResult::Halt { reason, gas_used } => Err(anyhow!(
+        ExecutionResult::Halt { reason, .. } => Err(anyhow!(
             "demo router halted after {gas_used} gas: {reason:?}"
         )),
     }

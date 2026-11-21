@@ -1,8 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
-use alloy_network::AnyNetwork;
+use crate::alloy_network::AnyNetwork;
 use alloy_primitives::{Address, B256, Log, U256, keccak256};
-use alloy_provider::Provider;
+use crate::alloy_provider::Provider;
 use evm_amm_state::adapters::{
     AdapterCache, AdapterRegistry, PoolKey, PoolRegistration, ProtocolMetadata, SlotDelta,
     StateUpdate, StorageSyncEncoding, StorageSyncError, StorageSyncSpec, run_storage_syncs,

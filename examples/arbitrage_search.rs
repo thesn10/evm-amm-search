@@ -9,7 +9,7 @@
 
 use std::sync::Arc;
 
-use alloy_eips::{BlockId, BlockNumberOrTag};
+use evm_amm_search::alloy_eips::{BlockId, BlockNumberOrTag};
 use alloy_primitives::{Address, U256, address};
 use anyhow::{Context, Result, ensure};
 use evm_amm_search::{AmmGraph, AmmSearcher, GraphBuildOptions, RouteRequest, SearchConfig};

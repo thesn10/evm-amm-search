@@ -16,13 +16,13 @@ use std::{
     time::{Duration, Instant},
 };
 
-use alloy_consensus::BlockHeader as _;
-use alloy_eips::{BlockId, BlockNumberOrTag};
-use alloy_network::{AnyNetwork, Ethereum, Network, primitives::BlockResponse as _};
+use evm_amm_search::alloy_consensus::BlockHeader as _;
+use evm_amm_search::alloy_eips::{BlockId, BlockNumberOrTag};
+use evm_amm_search::alloy_network::{AnyNetwork, Ethereum, Network, primitives::BlockResponse as _};
 use alloy_primitives::{Address, B256, Bytes, U256, address, hex, keccak256};
-use alloy_provider::{Provider, RootProvider};
-use alloy_rpc_client::{ClientBuilder, RpcClient, WsConnect};
-use alloy_rpc_types_eth::{Filter, Log as RpcLog, TransactionInput, TransactionRequest};
+use evm_amm_search::alloy_provider::{Provider, RootProvider};
+use evm_amm_search::alloy_rpc_client::{ClientBuilder, RpcClient, WsConnect};
+use evm_amm_search::alloy_rpc_types_eth::{Filter, Log as RpcLog, TransactionInput, TransactionRequest};
 use alloy_transport_balancer::{
     BatchingConfig, BatchingTransport, EndpointConfig, HttpClientConfig, LoadBalancedTransport,
     Weight,
@@ -79,7 +79,7 @@ use ratatui::{
     text::{Line, Span},
     widgets::{Block, Borders, List, ListItem, Paragraph, Wrap},
 };
-use reqwest::Url;
+use evm_amm_search::reqwest::Url;
 use rpc_profile::{RpcProfileLayer, RpcProfilePhase, RpcProfileTransport};
 use serde::Deserialize;
 use serde_json::{Value, json};
@@ -4828,13 +4828,13 @@ async fn submit_tenderly_simulation(
             "transaction_index".to_owned(),
             Value::from(transaction_index),
         );
-    let client = reqwest::Client::builder()
+    let client = evm_amm_search::reqwest::Client::builder()
         .timeout(Duration::from_secs(45))
         .build()
         .map_err(|error| format!("build Tenderly client: {error}"))?;
     let response = client
         .post(&request.endpoint)
-        .header(reqwest::header::CONTENT_TYPE, "application/json")
+        .header(evm_amm_search::reqwest::header::CONTENT_TYPE, "application/json")
         .header("X-Access-Key", &request.api_key)
         .json(&request.payload)
         .send()
@@ -6319,7 +6319,7 @@ async fn lookup_token_symbol(
         .get_chain_id()
         .await
         .context("fetch chain id for token registry lookup")?;
-    let client = reqwest::Client::builder()
+    let client = evm_amm_search::reqwest::Client::builder()
         .timeout(Duration::from_secs(
             env_usize("AMM_ROUTE_TUI_TOKEN_REGISTRY_TIMEOUT_SECS", 5) as u64,
         ))
@@ -8545,7 +8545,7 @@ async fn fetch_coingecko_prices(tokens: &[TokenInfo], previous: PriceBook) -> Re
     }
 
     let settings = coingecko_price_settings();
-    let client = reqwest::Client::builder()
+    let client = evm_amm_search::reqwest::Client::builder()
         .timeout(settings.timeout)
         .build()
         .context("build CoinGecko client")?;
@@ -8597,7 +8597,7 @@ async fn fetch_coingecko_prices(tokens: &[TokenInfo], previous: PriceBook) -> Re
 }
 
 async fn fetch_coingecko_token_price(
-    client: &reqwest::Client,
+    client: &evm_amm_search::reqwest::Client,
     settings: &CoingeckoPriceSettings,
     address: &str,
 ) -> Result<Option<(Address, f64)>> {
@@ -8614,10 +8614,10 @@ async fn fetch_coingecko_token_price(
         .await
         .with_context(|| format!("fetch CoinGecko token price for {address}"))?;
     let status = response.status();
-    if status == reqwest::StatusCode::TOO_MANY_REQUESTS {
+    if status == evm_amm_search::reqwest::StatusCode::TOO_MANY_REQUESTS {
         let retry_after = response
             .headers()
-            .get(reqwest::header::RETRY_AFTER)
+            .get(evm_amm_search::reqwest::header::RETRY_AFTER)
             .and_then(|value| value.to_str().ok())
             .map(|value| format!(" retry_after={value}s"))
             .unwrap_or_default();
@@ -9558,7 +9558,7 @@ mod live_tui_tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn live_gas_setup_installs_the_demo_router_in_runtime_state() {
-        use alloy_transport::mock::Asserter;
+        use evm_amm_search::alloy_transport::mock::Asserter;
         use evm_fork_cache::cache::CodeSeedState;
 
         let provider = RootProvider::<AnyNetwork>::new(RpcClient::mocked(Asserter::new()));

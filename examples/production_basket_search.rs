@@ -52,9 +52,9 @@ use std::env;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-use alloy_eips::BlockId;
+use evm_amm_search::alloy_eips::BlockId;
 use alloy_primitives::{Address, U256, address};
-use alloy_provider::Provider;
+use evm_amm_search::alloy_provider::Provider;
 use anyhow::{Context, Result, ensure};
 use evm_amm_search::{
     AdaptiveEdgeShortlistConfig, AffectedPools, AmmGraph, AmmSearcher, FastLaneConfig,

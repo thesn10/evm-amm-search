@@ -9,7 +9,7 @@ use std::process::Command;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-use alloy_eips::{BlockId, BlockNumberOrTag};
+use evm_amm_search::alloy_eips::{BlockId, BlockNumberOrTag};
 use alloy_primitives::{Address, Bytes, U256, address, aliases::U24, hex};
 use alloy_sol_types::SolCall;
 use anyhow::{Context, Result, bail, ensure};

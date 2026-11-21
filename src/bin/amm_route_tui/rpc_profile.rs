@@ -11,9 +11,9 @@ use std::{
     time::{Duration, Instant},
 };
 
-use alloy_json_rpc::{Id, RequestPacket, ResponsePacket};
+use evm_amm_search::alloy_json_rpc::{Id, RequestPacket, ResponsePacket};
 use alloy_primitives::B256;
-use alloy_transport::{TransportError, TransportFut};
+use evm_amm_search::alloy_transport::{TransportError, TransportFut};
 use tower::{Layer, Service};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, PartialOrd, Ord)]

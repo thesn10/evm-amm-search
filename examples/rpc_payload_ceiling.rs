@@ -20,17 +20,17 @@ use std::{
     time::Instant,
 };
 
-use alloy_eips::{BlockId, BlockNumberOrTag};
-use alloy_json_rpc::{RequestPacket, ResponsePacket};
-use alloy_network::AnyNetwork;
+use evm_amm_search::alloy_eips::{BlockId, BlockNumberOrTag};
+use evm_amm_search::alloy_json_rpc::{RequestPacket, ResponsePacket};
+use evm_amm_search::alloy_network::AnyNetwork;
 use alloy_primitives::{Address, U256, address};
-use alloy_provider::{Provider, RootProvider};
-use alloy_rpc_client::RpcClient;
-use alloy_transport::{TransportError, TransportFut};
+use evm_amm_search::alloy_provider::{Provider, RootProvider};
+use evm_amm_search::alloy_rpc_client::RpcClient;
+use evm_amm_search::alloy_transport::{TransportError, TransportFut};
 use alloy_transport_balancer::{HttpClientConfig, LoadBalancedTransport, Weight};
 use anyhow::{Context, Result, bail};
 use evm_fork_cache::{BulkCallConfig, CallDispatch, fetch_slots_bulk};
-use reqwest::Url;
+use evm_amm_search::reqwest::Url;
 use tower::Service;
 
 const WETH: Address = address!("C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2");

@@ -6,7 +6,7 @@ use evm_amm_state::adapters::{
     StateView,
 };
 use evm_fork_cache::cache::EvmOverlay;
-use revm::database_interface::Database;
+use crate::revm::database_interface::Database;
 
 pub(crate) struct OverlayAdapterCache {
     overlay: RefCell<EvmOverlay>,

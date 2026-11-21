@@ -20,9 +20,9 @@ use evm_amm_state::adapters::{BalancerTokenBalance, BalancerV2Metadata, SolidlyV
 use evm_fork_cache::cache::EvmCache;
 use petgraph::visit::{EdgeRef, IntoEdgeReferences};
 
-use alloy_provider::{RootProvider, network::AnyNetwork};
-use alloy_rpc_client::RpcClient;
-use alloy_transport::mock::Asserter;
+use evm_amm_search::alloy_provider::{RootProvider, network::AnyNetwork};
+use evm_amm_search::alloy_rpc_client::RpcClient;
+use evm_amm_search::alloy_transport::mock::Asserter;
 
 fn addr(byte: u8) -> Address {
     Address::repeat_byte(byte)
