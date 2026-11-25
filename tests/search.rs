@@ -170,6 +170,56 @@ fn graph_indexes_supported_ready_metadata_and_skips_the_rest() {
 }
 
 #[test]
+fn graph_indexes_custom_pools_with_explicit_tokens_and_skips_opaque_ones() {
+    let mut registry = AdapterRegistry::new();
+    let custom_indexed = PoolKey::Custom(evm_amm_state::adapters::CustomPoolKey::Address {
+        protocol: "erc4626",
+        address: addr(0x50),
+    });
+    let custom_too_few = PoolKey::Custom(evm_amm_state::adapters::CustomPoolKey::Address {
+        protocol: "erc4626",
+        address: addr(0x51),
+    });
+    let custom_opaque = PoolKey::Custom(evm_amm_state::adapters::CustomPoolKey::Address {
+        protocol: "erc4626",
+        address: addr(0x52),
+    });
+
+    register(
+        &mut registry,
+        PoolRegistration::new(custom_indexed.clone())
+            .with_metadata(ProtocolMetadata::Custom(std::sync::Arc::new(1u8)))
+            .with_tokens([addr(0x01), addr(0x02)])
+            .with_status(PoolStatus::Ready),
+    );
+    register(
+        &mut registry,
+        PoolRegistration::new(custom_too_few.clone())
+            .with_metadata(ProtocolMetadata::Custom(std::sync::Arc::new(2u8)))
+            .with_tokens([addr(0x01)])
+            .with_status(PoolStatus::Ready),
+    );
+    register(
+        &mut registry,
+        PoolRegistration::new(custom_opaque.clone())
+            .with_metadata(ProtocolMetadata::Custom(std::sync::Arc::new(3u8)))
+            .with_status(PoolStatus::Ready),
+    );
+
+    let report = AmmGraph::from_registry(&registry, GraphBuildOptions::default());
+
+    assert_eq!(report.indexed_pools, vec![custom_indexed.clone()]);
+    assert_eq!(report.graph.edge_count(), 2);
+    assert_eq!(report.graph.edges_for_pool(&custom_indexed).len(), 2);
+    assert!(report.skipped_pools.iter().any(|skip| {
+        skip.pool == custom_too_few && skip.reason == SkippedPoolReason::TooFewTokens { count: 1 }
+    }));
+    assert!(report.skipped_pools.iter().any(|skip| {
+        skip.pool == custom_opaque && skip.reason == SkippedPoolReason::UnsupportedMetadata
+    }));
+}
+
+#[test]
 fn graph_can_include_degraded_and_remove_pool_edges() {
     let mut registry = AdapterRegistry::new();
     let pool = PoolKey::UniswapV2(addr(0x10));

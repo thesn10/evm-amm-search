@@ -578,38 +578,30 @@ pub(crate) fn is_indexable_status(status: PoolStatus, options: GraphBuildOptions
 }
 
 pub(crate) fn tokens_for_pool(pool: &PoolRegistration) -> Result<Vec<Address>, SkippedPoolReason> {
-    let tokens = match &pool.metadata {
-        ProtocolMetadata::UniswapV2(metadata) => {
-            pair_tokens(metadata.token0, metadata.token1, "Uniswap V2 token0/token1")?
+    if let Some(tokens) = pool.tokens() {
+        return normalize_tokens(tokens);
+    }
+
+    match &pool.metadata {
+        ProtocolMetadata::UniswapV2(_) => Err(SkippedPoolReason::MissingMetadata(
+            "Uniswap V2 token0/token1",
+        )),
+        ProtocolMetadata::UniswapV3(_)
+        | ProtocolMetadata::PancakeV3(_)
+        | ProtocolMetadata::Slipstream(_) => Err(SkippedPoolReason::MissingMetadata(
+            "V3-family token0/token1",
+        )),
+        ProtocolMetadata::SolidlyV2(_) => Err(SkippedPoolReason::MissingMetadata(
+            "Solidly V2 token0/token1",
+        )),
+        ProtocolMetadata::BalancerV2(_) | ProtocolMetadata::Curve(_) => {
+            Err(SkippedPoolReason::TooFewTokens { count: 0 })
         }
-        ProtocolMetadata::UniswapV3(metadata)
-        | ProtocolMetadata::PancakeV3(metadata)
-        | ProtocolMetadata::Slipstream(metadata) => {
-            pair_tokens(metadata.token0, metadata.token1, "V3-family token0/token1")?
-        }
-        ProtocolMetadata::SolidlyV2(metadata) => {
-            pair_tokens(metadata.token0, metadata.token1, "Solidly V2 token0/token1")?
-        }
-        ProtocolMetadata::BalancerV2(metadata) => metadata.tokens.clone(),
-        ProtocolMetadata::Curve(metadata) => metadata.coins.clone(),
         ProtocolMetadata::Unknown | ProtocolMetadata::Custom(_) => {
-            return Err(SkippedPoolReason::UnsupportedMetadata);
+            Err(SkippedPoolReason::UnsupportedMetadata)
         }
         #[allow(unreachable_patterns)]
-        _ => return Err(SkippedPoolReason::UnsupportedMetadata),
-    };
-
-    normalize_tokens(tokens)
-}
-
-fn pair_tokens(
-    token0: Option<Address>,
-    token1: Option<Address>,
-    field: &'static str,
-) -> Result<Vec<Address>, SkippedPoolReason> {
-    match (token0, token1) {
-        (Some(token0), Some(token1)) => Ok(vec![token0, token1]),
-        _ => Err(SkippedPoolReason::MissingMetadata(field)),
+        _ => Err(SkippedPoolReason::UnsupportedMetadata),
     }
 }
 
