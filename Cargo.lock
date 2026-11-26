@@ -982,7 +982,7 @@ dependencies = [
 [[package]]
 name = "alloy-transport-balancer"
 version = "0.3.0"
-source = "git+https://github.com/thesn10/alloy-transport-balancer?branch=main#0616cd470ad3abc73ddc71f4d0c516f962795fad"
+source = "git+https://github.com/thesn10/alloy-transport-balancer?branch=main#08a4dee393661386d14936d11c6b15d8f84d58d7"
 dependencies = [
  "alloy-json-rpc 1.6.3",
  "alloy-json-rpc 2.6.1",
@@ -2599,7 +2599,7 @@ dependencies = [
 [[package]]
 name = "evm-amm-state"
 version = "0.3.1-alpha.10"
-source = "git+https://github.com/thesn10/evm-amm-state?branch=main#4ab08dbe956ba87af7035cc4f8613e6b6a134b7a"
+source = "git+https://github.com/thesn10/evm-amm-state?branch=main#0107058e90dc9a50bc725fa8ac7c9c0b491f4f30"
 dependencies = [
  "alloy-primitives",
  "alloy-sol-types",
